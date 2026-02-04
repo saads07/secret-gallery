@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Only You ❤️</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#ff758c,#ff7eb3);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* ===== LOCK SCREEN ===== */
+#lockScreen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle,#ff5f9e,#b30059);
+  z-index:999;
+}
+
+.lock-box{
+  background:rgba(255,255,255,.18);
+  padding:30px;
+  border-radius:22px;
+  text-align:center;
+  animation:pulse 2s infinite;
+  width:90%;
+  max-width:320px;
+}
+
+.lock-box input{
+  padding:12px;
+  width:100%;
+  border-radius:25px;
+  border:none;
+  text-align:center;
+  outline:none;
+  margin-top:10px;
+}
+
+.lock-box button{
+  margin-top:15px;
+  padding:10px;
+  border-radius:25px;
+  border:none;
+  background:#ff0066;
+  color:white;
+  width:100%;
+  cursor:pointer;
+}
+
+/* ===== CONTENT ===== */
+#content{
+  display:none;
+  padding:30px 16px 120px;
+  text-align:center;
+}
+
+h1{
+  font-size:32px;
+  text-shadow:0 0 18px #ff0066;
+}
+
+.subtitle{
+  font-size:15px;
+  opacity:.9;
+  margin-bottom:30px;
+}
+
+/* ===== GALLERY (3x3) ===== */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  max-width:1100px;
+  margin:auto;
+}
+
+/* Mobile adjustment */
+@media(max-width:768px){
+  .gallery{
+    grid-template-columns:repeat(2, 1fr);
+  }
+}
+@media(max-width:480px){
+  .gallery{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ===== PHOTO CARD ===== */
+.photo-frame{
+  position:relative;
+  padding:6px;
+  border-radius:24px;
+  perspective:900px;
+}
+
+.photo-frame::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:24px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #ff004c,
+    #ffb3d9,
+    #ff004c,
+    transparent
+  );
+  background-size:400% 100%;
+  animation:borderLight 3s linear infinite;
+}
+
+.photo-frame img{
+  width:100%;
+  height:280px;
+  object-fit:cover;
+  border-radius:20px;
+  position:relative;
+  z-index:1;
+  cursor:pointer;
+  opacity:0;
+  transform:scale(.4);
+  transition:transform .3s ease;
+}
+
+.photo-frame img.show{
+  animation:openPhoto 1.2s ease forwards;
+}
+
+/* ===== CAPTION ===== */
+.caption{
+  position:absolute;
+  inset:6px;
+  background:rgba(0,0,0,.45);
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  text-align:center;
+  font-size:15px;
+  opacity:0;
+  transition:.4s;
+  z-index:2;
+}
+
+.photo-frame:hover .caption{
+  opacity:1;
+}
+
+/* ===== LIGHTBOX ===== */
+#lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+#lightbox img{
+  max-width:92%;
+  max-height:92%;
+  border-radius:20px;
+  box-shadow:0 0 40px #ff4d88;
+  animation:zoomIn .5s ease;
+}
+
+/* ===== LOVE MESSAGE ===== */
+.message{
+  margin-top:70px;
+  max-width:850px;
+  margin-inline:auto;
+  font-size:18px;
+  line-height:1.9;
+  animation:fadeUp 2s ease;
+}
+
+.message span{
+  color:#ffe6f0;
+  font-weight:600;
+}
+
+/* ===== FLOATING HEARTS ===== */
+.bg-heart{
+  position:fixed;
+  bottom:-60px;
+  color:#ff0033;
+  opacity:.35;
+  animation:floatHeart 14s linear infinite;
+  pointer-events:none;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes borderLight{
+  from{background-position:0% 0}
+  to{background-position:400% 0}
+}
+
+@keyframes openPhoto{
+  0%{opacity:0;transform:scale(.4)}
+  60%{opacity:1;transform:scale(1.08)}
+  100%{opacity:1;transform:scale(1)}
+}
+
+@keyframes zoomIn{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+@keyframes floatHeart{
+  0%{transform:translateY(0) scale(.8);opacity:0}
+  30%{opacity:.35}
+  100%{transform:translateY(-140vh) scale(1.6);opacity:0}
+}
+
+@keyframes pulse{
+  50%{transform:scale(1.05)}
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOCK -->
+<div id="lockScreen">
+  <div class="lock-box">
+    <h3>❤️ Just For You ❤️</h3>
+    <input type="password" id="password" placeholder="Your name">
+    <button onclick="checkPassword()">Open</button>
+    <p id="error"></p>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+  <h1>You Are My Safe Place 🤍 my love ❤️</h1>
+  <p class="subtitle">Where my heart feels calm and sure</p>
+
+  <div class="gallery">
+    <div class="photo-frame"><img src="s1.jpg" data-caption="With you, I feel at home"></div>
+    <div class="photo-frame"><img src="s2.jpg" data-caption="Your presence brings me peace"></div>
+    <div class="photo-frame"><img src="s3.jpg" data-caption="Loving you feels natural"></div>
+    <div class="photo-frame"><img src="s5.jpg" data-caption="I want to be your reason to smile"
+     ^
+></div>
+
+
+    <div class="photo-frame"><img src="s4.jpg" data-caption="You are my calm in every storm"></div>
+    
+    <div class="photo-frame"><img src="s6.jpg" data-caption="Every moment with you feels warm"></div>
+
+    <div class="photo-frame"><img src="s7.jpg" data-caption="You make love feel safe"></div>
+    <div class="photo-frame"><img src="s8.jpg" data-caption="Being with you feels right"></div>
+    <div class="photo-frame"><img src="s9.jpg" data-caption="You are my always"></div>
+  </div>
+
+  <div class="message">
+    <p><span>With you, love feels gentle.</span></p>
+    <p>No fear. No doubt.</p>
+    <p>You are my peace in a loud world..</p>
+    <p>You never have to face things alone — I’m right beside you.…</p>
+    <p>“You & me — always.”🤍</p>
+    <p><span>“I love you you so so much sehru .❤️</span> 🤍"</p>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox"><img id="lightboxImg"></div>
+
+<script>
+const passwordInput=document.getElementById("password");
+const lockScreen=document.getElementById("lockScreen");
+const content=document.getElementById("content");
+const error=document.getElementById("error");
+const lightbox=document.getElementById("lightbox");
+const lightboxImg=document.getElementById("lightboxImg");
+
+const correctPassword="sehru";
+
+function checkPassword(){
+  if(passwordInput.value.toLowerCase()===correctPassword){
+    lockScreen.style.display="none";
+    content.style.display="block";
+    animatePhotos();
+    startHearts();
+  }else{
+    error.innerText="❤️ Try again";
+  }
+}
+
+function animatePhotos(){
+  document.querySelectorAll(".photo-frame img").forEach((img,i)=>{
+    setTimeout(()=>img.classList.add("show"),i*180);
+  });
+}
+
+document.querySelectorAll(".photo-frame").forEach(frame=>{
+  const img=frame.querySelector("img");
+
+  const cap=document.createElement("div");
+  cap.className="caption";
+  cap.innerText=img.dataset.caption;
+  frame.appendChild(cap);
+
+  frame.addEventListener("mousemove",e=>{
+    const r=frame.getBoundingClientRect();
+    const x=e.clientX-r.left;
+    const y=e.clientY-r.top;
+    const rx=-(y/r.height-.5)*10;
+    const ry=(x/r.width-.5)*10;
+    img.style.transform=`scale(1.08) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+
+  frame.addEventListener("mouseleave",()=>{
+    img.style.transform="scale(1) rotateX(0) rotateY(0)";
+  });
+
+  img.addEventListener("click",()=>{
+    lightbox.style.display="flex";
+    lightboxImg.src=img.src;
+  });
+});
+
+lightbox.addEventListener("click",()=>{
+  lightbox.style.display="none";
+});
+
+function startHearts(){
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="bg-heart";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=Math.random()*26+30+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),15000);
+  },500);
+}
+</script>
+
+</body>
+</html>
